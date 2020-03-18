@@ -3,6 +3,7 @@ package br.ce.wcaquino.servicos;
 import static br.ce.wcaquino.utils.DataUtils.adicionarDias;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,17 +20,19 @@ public class LocacaoService  {
 	
 
 
-	public Locacao alugarFilme(Usuario usuario, Filme filme) throws FilmeSemEstoqueException, LocadoraException{
+	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws FilmeSemEstoqueException, LocadoraException{
 		
-		if(filme.getEstoque()==0) {
+		
+		for(Filme filme:filmes) { // A cada um filme da lista filmes, faça o que pede abaixo:
+		if(filme.getEstoque() == 0) {
 			throw new FilmeSemEstoqueException();
-		}
+		}}
 		
 		if(usuario == null) {
 			throw new LocadoraException("Usuário não existente");
 		}
 		
-		if(filme == null){
+		if(filmes == null || filmes.isEmpty()){
 			throw new LocadoraException("Filme não existente");
 		}
 		
@@ -44,10 +47,17 @@ public class LocacaoService  {
 		
 		
 		Locacao locacao = new Locacao();
-		locacao.setFilme(filme);
+		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);
 		locacao.setDataLocacao(new Date());
-		locacao.setValor(filme.getPrecoLocacao());
+		// Que código maravilhoso!
+		//Crie uma variável para receber total de filmes
+		//Faça um "for" pela lista de filmes e assim conseguirá fazer o get de cada um.
+		Double valorTotal = 0d; 
+		for(Filme filme:filmes) {
+			valorTotal +=filme.getPrecoLocacao();
+		}
+		locacao.setValor(valorTotal);
 
 		//Entrega no dia seguinte
 		Date dataEntrega = new Date();

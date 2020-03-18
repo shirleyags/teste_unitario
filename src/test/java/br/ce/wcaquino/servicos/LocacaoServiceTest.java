@@ -9,7 +9,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
@@ -93,14 +95,16 @@ public class LocacaoServiceTest {
 		// usuario, Filme filme)
 
 		// Instancie a classe que vc quer testar
-		Filme filme = new Filme("Filme 1", 2, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0)); 
+		//Através do Array.asList tudo que for passado por parâmetro
+		//vai ser transfoprmado em um item de uma lista 
 		//System.out.println("Teste!");
 
 
 
 		// Ação
 			try {
-				service.alugarFilme(null, filme);
+				service.alugarFilme(null,filmes);
 				Assert.fail();
 			} catch (LocadoraException e) {
 				Assert.assertThat(e.getMessage(),is("Usuário não existente"));
