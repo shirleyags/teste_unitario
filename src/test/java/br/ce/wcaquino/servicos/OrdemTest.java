@@ -24,6 +24,6 @@ public class OrdemTest {
 	}
 	
 	//Colocando um contador e o resto que se refere a ele, é possível
-	//ver se qual o método de teste que inicializou primeiro.
+	//ver qual o método de teste que inicializou primeiro.
 	
 }
