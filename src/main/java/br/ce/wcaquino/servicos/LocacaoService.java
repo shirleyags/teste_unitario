@@ -24,22 +24,20 @@ public class LocacaoService  {
 		
 		
 		for(Filme filme:filmes) { // A cada um filme da lista filmes, faça o que pede abaixo:
-		if(filme.getEstoque() == 0) {
-			throw new FilmeSemEstoqueException();
-		}}
+			
+			
+			
+			if(filmes == null || filmes.isEmpty()){
+				throw new LocadoraException("Filme não existente");
+			}
+			if(filme.getEstoque() == 0) {
+				throw new FilmeSemEstoqueException();
+			}
+			if(usuario == null) {
+				throw new LocadoraException("Usuário não existente");
+			}
 		
-		if(usuario == null) {
-			throw new LocadoraException("Usuário não existente");
 		}
-		
-		if(filmes == null || filmes.isEmpty()){
-			throw new LocadoraException("Filme não existente");
-		}
-		
-		
-		
-		
-		
 		
 		
 		
@@ -52,12 +50,16 @@ public class LocacaoService  {
 		locacao.setDataLocacao(new Date());
 		// Que código maravilhoso!
 		//Crie uma variável para receber total de filmes
-		//Faça um "for" pela lista de filmes e assim conseguirá fazer o get de cada um.
-		Double valorTotal = 0d; 
-		for(Filme filme:filmes) {
-			valorTotal +=filme.getPrecoLocacao();
+		//Faça um "for" pela lista de filmes e assim conseguirá fazer o get de cada um.// Quando estava outra fórmula
+		Double valorTotal = 0d; // Forma para calculo do desconto
+		for(int i=0; i < filmes.size(); i++) {
+			Filme filme = filmes.get(i);
+			Double valorFilme = filme.getPrecoLocacao();
+			if(i == 2) {
+				valorFilme +=valorFilme*0.75;
+			}
 		}
-		locacao.setValor(valorTotal);
+			locacao.setValor(valorTotal);
 
 		//Entrega no dia seguinte
 		Date dataEntrega = new Date();

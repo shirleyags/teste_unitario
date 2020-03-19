@@ -18,8 +18,6 @@ public class CalculadoraServiceTest {
 		calculadora = new CalculadoraService();
 	}
 	
-
-	
 	@Test
 	public void deveSomarDoisValores() {
 		
@@ -33,8 +31,6 @@ public class CalculadoraServiceTest {
 		//Acao
 		
 		int resultado = calculadora.somar(a,b);
-		
-		
 		
 		//Verificação
 		Assert.assertEquals(9, resultado); 
@@ -104,8 +100,6 @@ public class CalculadoraServiceTest {
 		calculadora.dividir(a,b);
 		
 		//Verificação
-		
-		
 		
 	}
 	

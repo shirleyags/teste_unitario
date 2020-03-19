@@ -9,6 +9,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -48,8 +49,8 @@ public class LocacaoServiceTest {
 
 									// vez.
 
-//	@Rule
-//	public ExpectedException exception = ExpectedException.none(); // 4)Da forma nova
+	@Rule
+	public ExpectedException exception = ExpectedException.none(); // 4)Da forma nova
 
 	// OPÇÃO 3 - FORMA ROBUSTA DE TRATAR EXCEÇÕES
 
@@ -87,8 +88,49 @@ public class LocacaoServiceTest {
 	
 	
 	
+	// ----------------- |TDD vídeo 13
+	@Test
+	public void deveAlugarFilmeComSucesso() throws Exception {
+		// Cenário - onde as variáveis serão inicializadas
+		// Inicializou abaixo essas duas variáveis public: Locacao alugarFilme(Usuario
+		// usuario, Filme filme)
+
+		// Instancie a classe que vc quer testar
+		Usuario usuario = new Usuario("Usuario 1");
+		List <Filme>filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
+
+		// Ação
+
+		Locacao locacao = service.alugarFilme(usuario, filmes);
+
+		// Verificação
+		error.checkThat(locacao.getValor(), is(equalTo(5.0))); // Fazer o importe estático//Botão direito - sourse -
+																// "add import"
+		error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
+		error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)), is(true));
+	}
+	
+	@Test(expected=FilmeSemEstoqueException.class)
+	public void deveLancarExcecaoDeFilmeSemEstoque() throws Exception {
+
+		// Cenário - onde as variáveis serão inicializadas
+		// Inicializou abaixo essas duas variáveis public: Locacao alugarFilme(Usuario
+	// usuario, Filme filme)
+
+		// Instancie a classe que vc quer testar
+		
+		Usuario usuario = new Usuario("Usuario 1");
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 0, 4.0));
+
+		// Ação
+
+		service.alugarFilme(usuario, filmes);
+
+	}
+	
+	
 	@Test()
-	public void testLocacao_usuarioVazio() throws FilmeSemEstoqueException {
+	public void naoDeveAlugarFilmeSemUsuario() throws FilmeSemEstoqueException {
 
 		// Cenário - onde as variáveis serão inicializadas
 		// Inicializou abaixo essas duas variáveis public: Locacao alugarFilme(Usuario
@@ -101,7 +143,6 @@ public class LocacaoServiceTest {
 		//System.out.println("Teste!");
 
 
-
 		// Ação
 			try {
 				service.alugarFilme(null,filmes);
@@ -110,6 +151,75 @@ public class LocacaoServiceTest {
 				Assert.assertThat(e.getMessage(),is("Usuário não existente"));
 			}
 	}
+	
+	
+	//Forma 4
+	@Test()
+	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
+
+		// Cenário -
+		Usuario usuario = new Usuario("Usuario 1");
+	
+		exception.expect(LocadoraException.class);	
+		exception.expectMessage("Filme não existente");
+
+		// Ação
+
+		service.alugarFilme(usuario,null);	
+
+	}
+	
+	@Test
+	public void devePagar75pctNoFilme3() throws FilmeSemEstoqueException, LocadoraException {
+		//cenario
+		Usuario usuario = new Usuario("Usuario 1");
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),new Filme("Filme 3", 2, 4.0));
+
+		//ação
+		//Não precis instaciar o objeto, pois já está no "Before"
+		
+		
+		Locacao resultado = service.alugarFilme(usuario, filmes);	
+		
+		//verificacação
+		
+		assertThat(resultado.getValor(), is(11.00));
+
+		
+	}
+	
+	
+	
+
+	
+	
+	
+	
+	
+	//Teste com lista
+//	@Test()
+//	public void testLocacao_usuarioVazio() throws FilmeSemEstoqueException {
+//
+//		// Cenário - onde as variáveis serão inicializadas
+//		// Inicializou abaixo essas duas variáveis public: Locacao alugarFilme(Usuario
+//		// usuario, Filme filme)
+//
+//		// Instancie a classe que vc quer testar
+//		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0)); 
+//		//Através do Array.asList tudo que for passado por parâmetro
+//		//vai ser transfoprmado em um item de uma lista 
+//		//System.out.println("Teste!");
+//
+//
+//
+//		// Ação
+//			try {
+//				service.alugarFilme(null,filmes);
+//				Assert.fail();
+//			} catch (LocadoraException e) {
+//				Assert.assertThat(e.getMessage(),is("Usuário não existente"));
+//			}
+//	}
 
 	//
 //	@Test
@@ -235,5 +345,10 @@ public class LocacaoServiceTest {
 	// Junto, lá em cima, @Rule public ErrorCollector error = new ErrorCollector();
 	// error.checkThat(locacao.getValor(),is(not(6.0))); //Verifique que o valor da
 	// locação não é 6
+	
+	
+	
+	
+	
 
 }
