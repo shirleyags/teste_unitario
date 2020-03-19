@@ -11,6 +11,7 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +20,10 @@ import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -37,22 +40,17 @@ import br.ce.wcaquino.utils.DataUtils;
 public class LocacaoServiceTest {
 
 	
-	private LocacaoService service; //Para o before e o after funcionar para todos os testes dessa classe
+	private LocacaoService service; //Para o before e o after funcionarem para todos os testes dessa classe
 	
 	
 	//Definição do contador
-	//private static int contador =0; // Quando coloco que é static
-	//Passa para o escopo da classe, não do método/teste
+	//private static int contador =0; // Quando coloco que é static passa para o escopo da classe, não do método/teste
 	
 	@Rule
-	public ErrorCollector error = new ErrorCollector(); // Para que todos os erros apareçam no console, não um de cada
-
-									// vez.
+	public ErrorCollector error = new ErrorCollector(); // Para que todos os erros apareçam no console, não um de cada vez.
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none(); // 4)Da forma nova
-
-	// OPÇÃO 3 - FORMA ROBUSTA DE TRATAR EXCEÇÕES
 
 	
 	@Before
@@ -91,10 +89,8 @@ public class LocacaoServiceTest {
 	// ----------------- |TDD vídeo 13
 	@Test
 	public void deveAlugarFilmeComSucesso() throws Exception {
-		// Cenário - onde as variáveis serão inicializadas
-		// Inicializou abaixo essas duas variáveis public: Locacao alugarFilme(Usuario
-		// usuario, Filme filme)
-
+		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		
 		// Instancie a classe que vc quer testar
 		Usuario usuario = new Usuario("Usuario 1");
 		List <Filme>filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
@@ -104,7 +100,7 @@ public class LocacaoServiceTest {
 		Locacao locacao = service.alugarFilme(usuario, filmes);
 
 		// Verificação
-		error.checkThat(locacao.getValor(), is(equalTo(5.0))); // Fazer o importe estático//Botão direito - sourse -
+		error.checkThat(locacao.getValor(), is(equalTo(5.0))); // Fazer o import estático//Botão direito - sourse -
 																// "add import"
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)), is(true));
@@ -157,7 +153,7 @@ public class LocacaoServiceTest {
 	@Test()
 	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
 
-		// Cenário -
+		// Cenário 
 		Usuario usuario = new Usuario("Usuario 1");
 	
 		exception.expect(LocadoraException.class);	
@@ -170,23 +166,104 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void devePagar75pctNoFilme3() throws FilmeSemEstoqueException, LocadoraException {
-		//cenario
+	public void devePagar75PctNoFilme3() throws FilmeSemEstoqueException, LocadoraException {
+		//cenário
 		Usuario usuario = new Usuario("Usuario 1");
 		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),new Filme("Filme 3", 2, 4.0));
 
 		//ação
-		//Não precis instaciar o objeto, pois já está no "Before"
+		//Não precisa instaciar o objeto, pois já está no "Before"
 		
 		
 		Locacao resultado = service.alugarFilme(usuario, filmes);	
 		
-		//verificacação
+		//verificação
 		
 		assertThat(resultado.getValor(), is(11.00));
 
 		
 	}
+	
+	@Test
+	public void devePagar50PctNoFilme4() throws FilmeSemEstoqueException, LocadoraException {
+		//cenário
+		Usuario usuario = new Usuario("Usuario 1");
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),new Filme("Filme 3", 2, 4.0),new Filme("Filme 1", 2, 4.0));
+
+		//ação
+		//Não precisa instaciar o objeto, pois já está no "Before"
+		
+		
+		Locacao resultado = service.alugarFilme(usuario, filmes);	
+		
+		//verificação
+		
+		assertThat(resultado.getValor(), is(13.00));
+
+	}
+	
+	@Test
+	public void devePagar25PctNoFilme5() throws FilmeSemEstoqueException, LocadoraException {
+		//cenário
+		Usuario usuario = new Usuario("Usuario 1");
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0), 
+				new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),
+				new Filme("Filme 3", 2, 4.0),new Filme("Filme 1", 2, 4.0));
+
+		//ação
+		//Não precisa instaciar o objeto, pois já está no "Before"
+		
+		
+		Locacao resultado = service.alugarFilme(usuario, filmes);	
+		
+		//verificação
+		
+		assertThat(resultado.getValor(), is(14.00));
+
+	}
+	
+	@Test
+	public void devePagar100PctNoFilme6() throws FilmeSemEstoqueException, LocadoraException {
+		//cenário
+		Usuario usuario = new Usuario("Usuario 1");
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0), 
+				new Filme("Filme 2", 2, 4.0), new Filme("Filme 3", 2, 4.0),
+				new Filme("Filme 4", 2, 4.0),new Filme("Filme 5", 2, 4.0));
+			
+		//ação
+		//Não precisa instaciar o objeto, pois já está no "Before"
+		
+		
+		Locacao resultado = service.alugarFilme(usuario, filmes);	
+		
+		//verificação
+		
+		assertThat(resultado.getValor(), is(14.00));
+
+	}
+	
+	
+	@Test
+	// @Ignore - Para pular um teste
+	public void naoDeveDevolverFilmeNoDomingo() throws FilmeSemEstoqueException, LocadoraException {
+		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));//Esse código só roda no sábado.
+		
+		//cenário
+		//Preciso de um usuário e um filme ao menos pra isso.
+		Usuario usuario = new Usuario("Usuario 1");
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
+		
+		//ação
+		Locacao retorno = service.alugarFilme(usuario, filmes);	
+		
+		//verificação
+		
+		boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
+		Assert.assertTrue(ehSegunda);
+		
+	}
+	
+
 	
 	
 	

@@ -28,13 +28,13 @@ public class CalculadoraServiceTest {
 		
 		CalculadoraService calculadora = new CalculadoraService();
 		
-		//Acao
+		//Ação
 		
 		int resultado = calculadora.somar(a,b);
 		
 		//Verificação
 		Assert.assertEquals(9, resultado); 
-		// Usou a variável resultado, pois ela é que trará o valor real.
+		// Usou a variável resultado, pois ela trará o valor real.
 		
 		
 	}
@@ -50,7 +50,7 @@ public class CalculadoraServiceTest {
 		
 		CalculadoraService calculadora = new CalculadoraService();
 		
-		//Acao
+		//Ação
 		
 		int resultado = calculadora.subtrair(a,b);
 		
@@ -58,7 +58,7 @@ public class CalculadoraServiceTest {
 		
 		//Verificação
 		Assert.assertEquals(1, resultado); 
-		// Usou a variável resultado, pois ela é que trará o valor real.
+		// Usou a variável resultado, pois ela trará o valor real.
 		
 		
 	}
@@ -73,7 +73,7 @@ public class CalculadoraServiceTest {
 		
 		CalculadoraService calculadora = new CalculadoraService();
 		
-		//Acao
+		//Ação
 		
 		int resultado = calculadora.dividir(a,b);
 		

@@ -41,10 +41,10 @@ public class AssertTest {
 		// Forma negativa
 		Assert.assertNotEquals(u1, u2);
 
-		Assert.assertSame(u2, u3); //Quando eu quero verificar se os objetos são da mesma instancia
-		Assert.assertSame(u2, u2); //Quando eu quero verificar se os objetos são da mesma instancia
+		Assert.assertSame(u2, u3); //Quando eu quero verificar se os objetos são da mesma instância
+		Assert.assertSame(u2, u2); //Quando eu quero verificar se os objetos são da mesma instância
 		//Forma negativa
-		Assert.assertNotSame(u2, u2); //Para verificar se são iguais, mas de instancias diferentes.
+		Assert.assertNotSame(u2, u2); //Para verificar se são iguais, mas de instâncias diferentes.
 		
 		
 		Assert.assertNull(u3);

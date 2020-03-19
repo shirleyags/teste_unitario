@@ -2,6 +2,7 @@ package br.ce.wcaquino.servicos;
 
 import static br.ce.wcaquino.utils.DataUtils.adicionarDias;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,48 +23,58 @@ public class LocacaoService  {
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws FilmeSemEstoqueException, LocadoraException{
 		
-		
-		for(Filme filme:filmes) { // A cada um filme da lista filmes, faça o que pede abaixo:
 			
-			
-			
-			if(filmes == null || filmes.isEmpty()){
-				throw new LocadoraException("Filme não existente");
-			}
-			if(filme.getEstoque() == 0) {
-				throw new FilmeSemEstoqueException();
-			}
 			if(usuario == null) {
 				throw new LocadoraException("Usuário não existente");
 			}
-		
-		}
-		
-		
-		
-		
+				
+			if(filmes == null || filmes.isEmpty()){
+				throw new LocadoraException("Filme não existente");
+			}
+			
+			for(Filme filme:filmes) { // A cada um filme da lista filmes, faça o que pede abaixo:
+				if(filme.getEstoque() == 0) {
+					throw new FilmeSemEstoqueException();
+			}}
 		
 		
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);
 		locacao.setDataLocacao(new Date());
-		// Que código maravilhoso!
 		//Crie uma variável para receber total de filmes
-		//Faça um "for" pela lista de filmes e assim conseguirá fazer o get de cada um.// Quando estava outra fórmula
-		Double valorTotal = 0d; // Forma para calculo do desconto
+		Double valorTotal = 0d; // Forma para cálculo do desconto:
 		for(int i=0; i < filmes.size(); i++) {
 			Filme filme = filmes.get(i);
 			Double valorFilme = filme.getPrecoLocacao();
-			if(i == 2) {
-				valorFilme +=valorFilme*0.75;
+			switch(i) {
+			case 2: valorFilme = valorFilme * 0.75;break;
+			case 3: valorFilme = valorFilme * 0.50;break;
+			case 4: valorFilme = valorFilme * 0.25;break;
+			case 5: valorFilme = valorFilme * 0d;break;
 			}
+//			if(i == 2) {
+//				valorFilme = valorFilme * 0.75;
+//			}
+//			if(i == 3) {
+//				valorFilme = valorFilme * 0.50;
+//			}
+//			if(i == 4) {
+//				valorFilme = valorFilme * 0.25;
+//			}
+//			if(i == 5) {
+//				valorFilme = valorFilme * 0d;
+//			}
+			valorTotal += valorFilme;
 		}
 			locacao.setValor(valorTotal);
 
 		//Entrega no dia seguinte
 		Date dataEntrega = new Date();
 		dataEntrega = adicionarDias(dataEntrega, 1);
+		if(DataUtils.verificarDiaSemana(dataEntrega, Calendar.SUNDAY)) {
+			dataEntrega = adicionarDias(dataEntrega, 1);
+		}
 		locacao.setDataRetorno(dataEntrega);
 		
 		//Salvando a locacao...	
