@@ -28,7 +28,7 @@ public class AssertTest {
 		Assert.assertEquals(i, i2.intValue());//Transformou o objeto em um número
 		Assert.assertNotEquals("bola", "casa");
 		Assert.assertTrue("bola".equalsIgnoreCase("Bola"));
-		Assert.assertTrue("bola".startsWith("Bola"));
+		//Assert.assertTrue("bola".startsWith("Bola"));
 
 		Usuario u1 = new Usuario("Usuario 1");
 		Usuario u2 = new Usuario("Usuario 1");
@@ -39,15 +39,15 @@ public class AssertTest {
 		//A partir daí como o usuário do u2 e u1 é "usuário 1", enxerga como igual, se mudar o nome não enxerga mais.
 		Assert.assertEquals(u1, u2);
 		// Forma negativa
-		Assert.assertNotEquals(u1, u2);
+		//Assert.assertNotEquals(u1, u2);
 
 		Assert.assertSame(u2, u3); //Quando eu quero verificar se os objetos são da mesma instância
 		Assert.assertSame(u2, u2); //Quando eu quero verificar se os objetos são da mesma instância
 		//Forma negativa
-		Assert.assertNotSame(u2, u2); //Para verificar se são iguais, mas de instâncias diferentes.
+		//Assert.assertNotSame(u2, u2); //Para verificar se são iguais, mas de instâncias diferentes.
 		
 		
-		Assert.assertNull(u3);
+		//Assert.assertNull(u3);
 		//Forma negativa 
 		Assert.assertNotNull(u3);
 
@@ -55,7 +55,7 @@ public class AssertTest {
 		
 		
 		//Forma genérica
-		Assert.assertNull(u3);
+		//Assert.assertNull(u3);
 
 		
 		

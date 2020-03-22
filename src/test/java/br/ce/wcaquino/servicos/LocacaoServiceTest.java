@@ -18,6 +18,8 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import br.ce.wcaquino.builder.FilmeBuilder;
+import br.ce.wcaquino.builder.UsuarioBuilder;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
@@ -81,8 +83,12 @@ public class LocacaoServiceTest {
 		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		
 		// Instancie a classe que vc quer testar
-		Usuario usuario = new Usuario("Usuario 1");
-		List <Filme>filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
+		//Usuario usuario = new Usuario("Usuario 1");
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());		
+
+		//List <Filme>filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
 
 		// Ação
 
@@ -107,8 +113,12 @@ public class LocacaoServiceTest {
 
 		// Instancie a classe que vc quer testar
 		
-		Usuario usuario = new Usuario("Usuario 1");
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 0, 4.0));
+		
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		//Usuario usuario = new Usuario("Usuario 1");
+		//List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 0, 4.0));
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().semEstoque().agora());		
+
 
 		// Ação
 
@@ -146,8 +156,7 @@ public class LocacaoServiceTest {
 	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
 
 		// Cenário 
-		Usuario usuario = new Usuario("Usuario 1");
-	
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();	
 		exception.expect(LocadoraException.class);	
 		exception.expectMessage("Filme não existente");
 
@@ -249,8 +258,8 @@ public class LocacaoServiceTest {
 		
 		//cenário
 		//Preciso de um usuário e um filme ao menos pra isso.
-		Usuario usuario = new Usuario("Usuario 1");
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());		
 		
 		//ação
 		Locacao retorno = service.alugarFilme(usuario, filmes);	
