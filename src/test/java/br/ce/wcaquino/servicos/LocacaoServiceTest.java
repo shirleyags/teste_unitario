@@ -34,6 +34,8 @@ import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exceptions.FilmeSemEstoqueException;
 import br.ce.wcaquino.exceptions.LocadoraException;
+import br.ce.wcaquino.matchers.DiaSemanaMatcher;
+import br.ce.wcaquino.matchers.MatchersProprios;
 import br.ce.wcaquino.servicos.LocacaoService;
 import br.ce.wcaquino.utils.DataUtils;
 
@@ -165,82 +167,89 @@ public class LocacaoServiceTest {
 
 	}
 	
-	@Test
-	public void devePagar75PctNoFilme3() throws FilmeSemEstoqueException, LocadoraException {
-		//cenário
-		Usuario usuario = new Usuario("Usuario 1");
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),new Filme("Filme 3", 2, 4.0));
-
-		//ação
-		//Não precisa instaciar o objeto, pois já está no "Before"
-		
-		
-		Locacao resultado = service.alugarFilme(usuario, filmes);	
-		
-		//verificação
-		
-		assertThat(resultado.getValor(), is(11.00));
-
-		
-	}
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
-	@Test
-	public void devePagar50PctNoFilme4() throws FilmeSemEstoqueException, LocadoraException {
-		//cenário
-		Usuario usuario = new Usuario("Usuario 1");
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),new Filme("Filme 3", 2, 4.0),new Filme("Filme 1", 2, 4.0));
-
-		//ação
-		//Não precisa instaciar o objeto, pois já está no "Before"
-		
-		
-		Locacao resultado = service.alugarFilme(usuario, filmes);	
-		
-		//verificação
-		
-		assertThat(resultado.getValor(), is(13.00));
-
-	}
+			// TESTES PARA VERIFICAR DESCONTOS DE ACORDO COM A QUANTIDADE DE PROTUDOS COMPRADOS	- Vídeo 14
+			//EXISTE UMA FORMA SIMPLIFICADA NO ARQUIVO "CalculoValorLocacaoTest"
 	
-	@Test
-	public void devePagar25PctNoFilme5() throws FilmeSemEstoqueException, LocadoraException {
-		//cenário
-		Usuario usuario = new Usuario("Usuario 1");
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0), 
-				new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),
-				new Filme("Filme 3", 2, 4.0),new Filme("Filme 1", 2, 4.0));
-
-		//ação
-		//Não precisa instaciar o objeto, pois já está no "Before"
-		
-		
-		Locacao resultado = service.alugarFilme(usuario, filmes);	
-		
-		//verificação
-		
-		assertThat(resultado.getValor(), is(14.00));
-
-	}
+//	@Test
+//	public void devePagar75PctNoFilme3() throws FilmeSemEstoqueException, LocadoraException {
+//		//cenário
+//		Usuario usuario = new Usuario("Usuario 1");
+//		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),new Filme("Filme 3", 2, 4.0));
+//
+//		//ação
+//		//Não precisa instaciar o objeto, pois já está no "Before"
+//		
+//		
+//		Locacao resultado = service.alugarFilme(usuario, filmes);	
+//		
+//		//verificação
+//		
+//		assertThat(resultado.getValor(), is(11.00));
+//
+//		
+//	}
+//	
+//	@Test
+//	public void devePagar50PctNoFilme4() throws FilmeSemEstoqueException, LocadoraException {
+//		//cenário
+//		Usuario usuario = new Usuario("Usuario 1");
+//		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),new Filme("Filme 3", 2, 4.0),new Filme("Filme 1", 2, 4.0));
+//
+//		//ação
+//		//Não precisa instaciar o objeto, pois já está no "Before"
+//		
+//		
+//		Locacao resultado = service.alugarFilme(usuario, filmes);	
+//		
+//		//verificação
+//		
+//		assertThat(resultado.getValor(), is(13.00));
+//
+//	}
+//	
+//	@Test
+//	public void devePagar25PctNoFilme5() throws FilmeSemEstoqueException, LocadoraException {
+//		//cenário
+//		Usuario usuario = new Usuario("Usuario 1");
+//		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0), 
+//				new Filme("Filme 1", 2, 4.0),new Filme("Filme 2", 2, 4.0),
+//				new Filme("Filme 3", 2, 4.0),new Filme("Filme 1", 2, 4.0));
+//
+//		//ação
+//		//Não precisa instaciar o objeto, pois já está no "Before"
+//		
+//		
+//		Locacao resultado = service.alugarFilme(usuario, filmes);	
+//		
+//		//verificação
+//		
+//		assertThat(resultado.getValor(), is(14.00));
+//
+//	}
+//	
+//	@Test
+//	public void devePagar100PctNoFilme6() throws FilmeSemEstoqueException, LocadoraException {
+//		//cenário
+//		Usuario usuario = new Usuario("Usuario 1");
+//		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0), 
+//				new Filme("Filme 2", 2, 4.0), new Filme("Filme 3", 2, 4.0),
+//				new Filme("Filme 4", 2, 4.0),new Filme("Filme 5", 2, 4.0));
+//			
+//		//ação
+//		//Não precisa instaciar o objeto, pois já está no "Before"
+//		
+//		
+//		Locacao resultado = service.alugarFilme(usuario, filmes);	
+//		
+//		//verificação
+//		
+//		assertThat(resultado.getValor(), is(14.00));
+//
+//	}
 	
-	@Test
-	public void devePagar100PctNoFilme6() throws FilmeSemEstoqueException, LocadoraException {
-		//cenário
-		Usuario usuario = new Usuario("Usuario 1");
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0), 
-				new Filme("Filme 2", 2, 4.0), new Filme("Filme 3", 2, 4.0),
-				new Filme("Filme 4", 2, 4.0),new Filme("Filme 5", 2, 4.0));
-			
-		//ação
-		//Não precisa instaciar o objeto, pois já está no "Before"
-		
-		
-		Locacao resultado = service.alugarFilme(usuario, filmes);	
-		
-		//verificação
-		
-		assertThat(resultado.getValor(), is(14.00));
-
-	}
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
 	
 	@Test
@@ -258,9 +267,13 @@ public class LocacaoServiceTest {
 		
 		//verificação
 		
+		//Vídeo 17
 		boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
 		Assert.assertTrue(ehSegunda);
-		
+		//assertThat(retorno.getDataRetorno(), new DiaSemanaMatcher(Calendar.MONDAY));
+//		assertThat(retorno.getDataRetorno(), MatchersProprios.caiEm(Calendar.MONDAY));
+		assertThat(retorno.getDataRetorno(), MatchersProprios.caiNumaSegunda());
+//		
 	}
 	
 
