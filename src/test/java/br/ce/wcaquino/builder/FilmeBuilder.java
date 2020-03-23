@@ -21,7 +21,7 @@ private FilmeBuilder() { // É privado para que ninguém possa criar algum builder
 		builder.filme = new Filme(); //Inicializando a construção do usuário
 		builder.filme.setNome("Usuário 1"); //Povoando
 		builder.filme.setEstoque(2); //Povoando
-		builder.filme.setPrecoLocacao(5.0); //Povoando
+		builder.filme.setPrecoLocacao(4.0); //Povoando
 		return builder;
 
 	}

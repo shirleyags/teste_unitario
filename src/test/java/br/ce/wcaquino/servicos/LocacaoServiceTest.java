@@ -95,7 +95,7 @@ public class LocacaoServiceTest {
 		Locacao locacao = service.alugarFilme(usuario, filmes);
 
 		// Verificação
-		error.checkThat(locacao.getValor(), is(equalTo(5.0))); // Fazer o import estático//Botão direito - sourse -
+		error.checkThat(locacao.getValor(), is(equalTo(4.0))); // Fazer o import estático//Botão direito - sourse -
 																// "add import"
 	
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
@@ -135,7 +135,7 @@ public class LocacaoServiceTest {
 		// usuario, Filme filme)
 
 		// Instancie a classe que vc quer testar
-		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0)); 
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().semEstoque().agora());		
 		//Através do Array.asList tudo que for passado por parâmetro
 		//vai ser transfoprmado em um item de uma lista 
 		//System.out.println("Teste!");

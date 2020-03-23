@@ -34,7 +34,7 @@ import br.ce.wcaquino.entidades.Locacao;
 			elemento.setFilmes(Arrays.asList(FilmeBuilder.umFilme().agora()));		
 			elemento.setDataLocacao(new Date());
 			elemento.setDataRetorno(DataUtils.obterDataComDiferencaDias(1));
-			elemento.setValor(5.0);
+			elemento.setValor(4.0);
 		}
 
 		public LocacaoBuilder comUsuario(Usuario param) {
@@ -67,4 +67,4 @@ import br.ce.wcaquino.entidades.Locacao;
 		}
 	}
 
-}
+
