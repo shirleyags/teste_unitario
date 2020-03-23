@@ -17,11 +17,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 
 import br.ce.wcaquino.builder.FilmeBuilder;
 import br.ce.wcaquino.builder.UsuarioBuilder;
 import br.ce.wcaquino.daos.LocacaoDAO;
-import br.ce.wcaquino.daos.LocacaoDAOFake;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
@@ -34,6 +34,11 @@ public class LocacaoServiceTest {
 
 	
 	private LocacaoService service; //Para o before e o after funcionarem para todos os testes dessa classe
+	
+	private SPCService spc;
+	private LocacaoDAO dao;
+
+	
 	
 	
 	//Definição do contador
@@ -49,8 +54,11 @@ public class LocacaoServiceTest {
 	@Before
 	public void setup() {
 		service = new LocacaoService(); //Só o nome da classe que está declarada em cima.
-		LocacaoDAO dao = new LocacaoDAOFake();
+		dao = Mockito.mock(LocacaoDAO.class);
 		service.setLocacaoDAO(dao);
+		spc = Mockito.mock(SPCService.class);
+		service.setSPCService(spc);
+
 		
 	
 //			contador++;
@@ -280,6 +288,33 @@ public class LocacaoServiceTest {
 //		
 	}
 	
+	@Test
+	public void naoDeveAlugarFilmeParaNegativadoSPC() throws FilmeSemEstoqueException, LocadoraException {
+		
+		//Cenário
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuário2").agora();
+
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());		
+		
+		
+		Mockito.when(spc.possuiNegativacao(usuario)).thenReturn(true);
+		
+		
+		exception.expect(LocadoraException.class);
+		exception.expectMessage("Usuário negativado");
+
+		
+		
+		//Ação
+		
+		service.alugarFilme(usuario, filmes);	
+
+		
+		
+	}
+	
+	
 
 	
 	
@@ -439,6 +474,15 @@ public class LocacaoServiceTest {
 	// Junto, lá em cima, @Rule public ErrorCollector error = new ErrorCollector();
 	// error.checkThat(locacao.getValor(),is(not(6.0))); //Verifique que o valor da
 	// locação não é 6
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

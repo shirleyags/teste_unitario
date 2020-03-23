@@ -20,6 +20,11 @@ public class UsuarioBuilder {
 		
 	}
 	
+	public UsuarioBuilder comNome(String nome) { //Vídeo 4/Mockito - Cadastrar outro usuário no arquivo LocacaoServiceTest 
+		usuario.setNome(nome);
+		return this;
+	}
+	
 	public Usuario agora() {
 		return usuario;
 	}

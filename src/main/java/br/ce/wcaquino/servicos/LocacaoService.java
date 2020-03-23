@@ -16,7 +16,8 @@ import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoService  {
 	
-	public LocacaoDAO dao;
+	private LocacaoDAO dao;
+	private SPCService spcService;
 	
 	
 
@@ -36,6 +37,10 @@ public class LocacaoService  {
 				if(filme.getEstoque() == 0) {
 					throw new FilmeSemEstoqueException();
 			}}
+			
+			if(spcService.possuiNegativacao(usuario)) {
+				throw new LocadoraException("Usuário negativado");
+			}
 		
 		
 		Locacao locacao = new Locacao();
@@ -87,6 +92,10 @@ public class LocacaoService  {
 	public void setLocacaoDAO(LocacaoDAO dao) {
 		this.dao = dao;
 		
+	}
+	
+	public void setSPCService(SPCService spc) { //Está injetado
+			spcService = spc;
 	}
 
 	
