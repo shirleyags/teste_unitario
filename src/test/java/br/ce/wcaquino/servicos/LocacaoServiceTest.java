@@ -303,7 +303,8 @@ public class LocacaoServiceTest {
 		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());		
 		
 		
-		Mockito.when(spc.possuiNegativacao(usuario)).thenReturn(true);
+		Mockito.when(spc.possuiNegativacao(Mockito.any(Usuario.class))).thenReturn(true);
+		//DESSA FORMA DE CIMA, INDEPENDENTE DE QUAL USUÁRIO FOR PASSADO O TESTE VAI ACONTECER
 		
 		//Ação
 		try {
@@ -323,13 +324,22 @@ public class LocacaoServiceTest {
 	@Test // Muito difícil de entender - Vídeo 5 de Mocks
 	public void deveEnviarEmailLocacoesAtrasadas() {
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuário do dia").agora();
+		
+
 		//Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario2").agora();
 
 		//Cenário
 		List<Locacao> locacoes = Arrays.asList(LocacaoBuilder.umLocacao()
+				.atrasado()
 				.comUsuario(usuario)
-				.comDataRetorno(DataUtils.obterDataComDiferencaDias(-2))
-				.agora());
+				.agora(),
+				/*LocacaoBuilder.umLocacao()
+				.atrasado()
+				.comUsuario(usuario)
+				.agora(),*/
+				
+				LocacaoBuilder.umLocacao().comUsuario(usuario2).agora());
 		Mockito.when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
 		//Ação
 		service.notificarAtrasos();
@@ -338,11 +348,14 @@ public class LocacaoServiceTest {
 		//Verficação
 		
 		Mockito.verify(email).notificarAtraso(usuario);
-		
-		
-		
+		//Mockito.verify(email, Mockito.times(2)).notificarAtraso(usuario);
+		//Mockito.verify(email, Mockito.atLeast(2)).notificarAtraso(usuario); - Deve ser enviado pelo menos dois emails.
+		Mockito.verify(email, Mockito.never()).notificarAtraso(usuario2); //Para verificar se nunca ocorreu o envio para o usuario2
+		Mockito.verifyNoMoreInteractions(email); // Mostra se nenhum outro email foi enviado que não seja
+		//para o "usuário"
+		Mockito.verifyZeroInteractions(spc);
+				
 	}
-
 	
 	}
 	
