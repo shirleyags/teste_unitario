@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.mockito.Mock;
+
 import br.ce.wcaquino.daos.LocacaoDAO;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
@@ -16,8 +18,11 @@ import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoService {
 
+	
 	private LocacaoDAO dao;
+	
 	private SPCService spcService;
+	
 	private EmailService emailService;
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws FilmeSemEstoqueException, LocadoraException {
@@ -100,19 +105,19 @@ public class LocacaoService {
 		}
 	}
 
-	public void setLocacaoDAO(LocacaoDAO dao) {
-		this.dao = dao;
-
-	}	
-
-	public void setEmail(EmailService email) {
-		
-		emailService = email;
-
-	}
-
-	public void setSPCService(SPCService spc) { // Está injetado
-		spcService = spc;
-	}
+	//	public void setLocacaoDAO(LocacaoDAO dao) {
+	//		this.dao = dao;
+	//
+	//	}	
+	//
+	//	public void setEmail(EmailService email) {
+	//		
+	//		emailService = email;
+	//
+	//	}
+	//
+	//	public void setSPCService(SPCService spc) { // Está injetado
+	//		spcService = spc;
+	//	}
 
 }

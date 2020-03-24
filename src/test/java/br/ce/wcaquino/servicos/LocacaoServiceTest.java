@@ -18,7 +18,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.ce.wcaquino.builder.FilmeBuilder;
 import br.ce.wcaquino.builder.LocacaoBuilder;
@@ -35,10 +38,15 @@ import br.ce.wcaquino.utils.DataUtils;
 public class LocacaoServiceTest {
 
 	
+	@InjectMocks
 	private LocacaoService service; //Para o before e o after funcionarem para todos os testes dessa classe
 	
+	
+	@Mock
 	private SPCService spc;
+	@Mock
 	private LocacaoDAO dao;
+	@Mock
 	private EmailService email;
 
 	
@@ -56,13 +64,14 @@ public class LocacaoServiceTest {
 	
 	@Before
 	public void setup() {
-		service = new LocacaoService(); //Só o nome da classe que está declarada em cima.
-		dao = Mockito.mock(LocacaoDAO.class);
-		service.setLocacaoDAO(dao);
-		spc = Mockito.mock(SPCService.class);
-		service.setSPCService(spc);
-		email = Mockito.mock(EmailService.class);
-		service.setEmail(email);
+		MockitoAnnotations.initMocks(this);
+//		service = new LocacaoService(); //Só o nome da classe que está declarada em cima.
+//		dao = Mockito.mock(LocacaoDAO.class);
+//		service.setLocacaoDAO(dao);
+//		spc = Mockito.mock(SPCService.class);
+//		service.setSPCService(spc);
+//		email = Mockito.mock(EmailService.class);
+//		service.setEmail(email);
 
 		
 	

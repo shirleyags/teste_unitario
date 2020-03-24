@@ -13,7 +13,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.ce.wcaquino.builder.FilmeBuilder;
 import br.ce.wcaquino.daos.LocacaoDAO;
@@ -24,42 +27,38 @@ import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exceptions.FilmeSemEstoqueException;
 import br.ce.wcaquino.exceptions.LocadoraException;
 
-
-
 //vídeo16 - MUITO IMPORTANTE
 @RunWith(Parameterized.class)
 public class CalculoValorLocacaoTest {
 
+	@InjectMocks
 	private LocacaoService service;
+	@Mock
 	private SPCService spc;
+	@Mock
 	private LocacaoDAO dao;
 
 	@Parameter
 	public List<Filme> filmes;
-	
-	@Parameter(value=1)//Valor 1, pois a lista de filmes (acima) começa em zero
+
+	@Parameter(value = 1) // Valor 1, pois a lista de filmes (acima) começa em zero
 	public Double valorLocacao;
 
-	@Parameter(value=2)
+	@Parameter(value = 2)
 	public String cenario;
+
 	@Before
 	public void setup() {
-		service = new LocacaoService();
-		dao = Mockito.mock(LocacaoDAO.class);
-		service.setLocacaoDAO(dao);
-		spc = Mockito.mock(SPCService.class);
-		service.setSPCService(spc);
+		MockitoAnnotations.initMocks(this);
 	}
-	
-	
-	private static Filme filme1 = FilmeBuilder.umFilme().agora();	
-	private static Filme filme2 = FilmeBuilder.umFilme().agora();	
-	private static Filme filme3 = FilmeBuilder.umFilme().agora();	
-	private static Filme filme4 = FilmeBuilder.umFilme().agora();	
-	private static Filme filme5 = FilmeBuilder.umFilme().agora();	
-	private static Filme filme6 = FilmeBuilder.umFilme().agora();	
-	
-	
+
+	private static Filme filme1 = FilmeBuilder.umFilme().agora();
+	private static Filme filme2 = FilmeBuilder.umFilme().agora();
+	private static Filme filme3 = FilmeBuilder.umFilme().agora();
+	private static Filme filme4 = FilmeBuilder.umFilme().agora();
+	private static Filme filme5 = FilmeBuilder.umFilme().agora();
+	private static Filme filme6 = FilmeBuilder.umFilme().agora();
+
 //	private static Filme filme1 = new Filme("Filme 1", 2, 4.0);
 //	private static Filme filme2 = new Filme("Filme 2", 2, 4.0);
 //	private static Filme filme3 = new Filme("Filme 3", 2, 4.0);
@@ -67,14 +66,12 @@ public class CalculoValorLocacaoTest {
 //	private static Filme filme5 = new Filme("Filme 5", 2, 4.0);
 //	private static Filme filme6 = new Filme("Filme 6", 2, 4.0);
 //	
-	@Parameters   (name="{2}")//(name="Teste{index}= {0}-{1}")
-	public static Collection<Object[]> getPametros(){
-		return Arrays.asList(new Object[][] {
-			{Arrays.asList(filme1, filme2, filme3), 11.0,"3 Filmes: 25%"},
-			{Arrays.asList(filme1, filme2, filme3, filme4), 13.0,"4 Filmes: 50%"},
-			{Arrays.asList(filme1, filme2, filme3, filme4, filme5), 14.0, "5 Filmes: 75%"},
-			{Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6), 14.0, "6 Filmes: 100%"}
-		});
+	@Parameters(name = "{2}") // (name="Teste{index}= {0}-{1}")
+	public static Collection<Object[]> getPametros() {
+		return Arrays.asList(new Object[][] { { Arrays.asList(filme1, filme2, filme3), 11.0, "3 Filmes: 25%" },
+				{ Arrays.asList(filme1, filme2, filme3, filme4), 13.0, "4 Filmes: 50%" },
+				{ Arrays.asList(filme1, filme2, filme3, filme4, filme5), 14.0, "5 Filmes: 75%" },
+				{ Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6), 14.0, "6 Filmes: 100%" } });
 	}
 
 	@Test
@@ -89,7 +86,7 @@ public class CalculoValorLocacaoTest {
 		assertThat(resultado.getValor(), is(valorLocacao));
 
 	}
-	
+
 	@Test
 	public void print() {
 		System.out.println(valorLocacao);
