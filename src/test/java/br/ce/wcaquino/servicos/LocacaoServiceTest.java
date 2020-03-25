@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.graalvm.compiler.core.common.type.ArithmeticOpTable.BinaryOp.UMulHigh;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -19,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,8 +37,11 @@ import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exceptions.FilmeSemEstoqueException;
 import br.ce.wcaquino.exceptions.LocadoraException;
 import br.ce.wcaquino.matchers.MatchersProprios;
+import br.ce.wcaquino.runners.ParallelRunner;
 import br.ce.wcaquino.utils.DataUtils;
 
+
+@RunWith(ParallelRunner.class)
 public class LocacaoServiceTest {
 
 	private static final int Locacao = 0;
@@ -65,6 +70,7 @@ public class LocacaoServiceTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		System.out.println("Inicializando2...");
 //		service = new LocacaoService(); //Só o nome da classe que está declarada em cima.
 //		dao = Mockito.mock(LocacaoDAO.class);
 //		service.setLocacaoDAO(dao);
@@ -72,6 +78,7 @@ public class LocacaoServiceTest {
 //		service.setSPCService(spc);
 //		email = Mockito.mock(EmailService.class);
 //		service.setEmail(email);
+	}
 
 //			contador++;
 //			System.out.println(contador);
@@ -79,11 +86,12 @@ public class LocacaoServiceTest {
 		// Incremento
 		// Impressão do contador
 
-	}
-//	@After
-//	public void tearDown() {
+		@After
+	public void tearDown() {
+	System.out.println("Finalizando2...");
+
 //		System.out.println("After");
-//	}
+	}
 
 	// Essa opção é para antes da classe e depois dela ser instaciada.
 	// Não vai se aplicar antes e depois de cada método de teste.
