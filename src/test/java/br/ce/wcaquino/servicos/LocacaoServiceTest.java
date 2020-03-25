@@ -4,6 +4,7 @@ import static br.ce.wcaquino.utils.DataUtils.obterDataComDiferencaDias;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -303,7 +304,7 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaNegativadoSPC() throws FilmeSemEstoqueException, LocadoraException {
+	public void naoDeveAlugarFilmeParaNegativadoSPC() throws Exception {
 		
 		//Cenário
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
@@ -365,6 +366,35 @@ public class LocacaoServiceTest {
 		Mockito.verifyZeroInteractions(spc);
 				
 	}
+	
+	
+	
+	@Test
+	public void deveTratarErronoSPC() throws Exception {
+		
+		//Cenário
+		
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
+		
+		Mockito.when(spc.possuiNegativacao(usuario)).thenThrow(new Exception("Falha Catastrófica"));
+		
+		//Verificação
+
+		exception.expect(LocadoraException.class);
+		exception.expectMessage("Problemas com o SPC, tente novamente.");
+
+		
+		
+		//Ação
+		
+		service.alugarFilme(usuario, filmes);
+		
+		
+	}
+	
+	
+	
 	
 	}
 	
