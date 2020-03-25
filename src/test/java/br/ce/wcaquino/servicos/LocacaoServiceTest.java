@@ -19,6 +19,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -38,11 +39,11 @@ import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoServiceTest {
 
-	
+	private static final int Locacao = 0;
+
 	@InjectMocks
-	private LocacaoService service; //Para o before e o after funcionarem para todos os testes dessa classe
-	
-	
+	private LocacaoService service; // Para o before e o after funcionarem para todos os testes dessa classe
+
 	@Mock
 	private SPCService spc;
 	@Mock
@@ -50,19 +51,17 @@ public class LocacaoServiceTest {
 	@Mock
 	private EmailService email;
 
-	
-	
-	
-	//Definição do contador
-	//private static int contador =0; // Quando coloco que é static passa para o escopo da classe, não do método/teste
-	
+	// Definição do contador
+	// private static int contador =0; // Quando coloco que é static passa para o
+	// escopo da classe, não do método/teste
+
 	@Rule
-	public ErrorCollector error = new ErrorCollector(); // Para que todos os erros apareçam no console, não um de cada vez.
+	public ErrorCollector error = new ErrorCollector(); // Para que todos os erros apareçam no console, não um de cada
+														// vez.
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none(); // 4)Da forma nova
 
-	
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
@@ -74,25 +73,21 @@ public class LocacaoServiceTest {
 //		email = Mockito.mock(EmailService.class);
 //		service.setEmail(email);
 
-		
-	
 //			contador++;
 //			System.out.println(contador);
 
-		
-		
-		//Incremento
-		//Impressão do contador
+		// Incremento
+		// Impressão do contador
 
 	}
 //	@After
 //	public void tearDown() {
 //		System.out.println("After");
 //	}
-	
-	//Essa opção é para antes da classe e depois dela ser instaciada.
-	//Não vai se aplicar antes e depois de cada método de teste.
-	
+
+	// Essa opção é para antes da classe e depois dela ser instaciada.
+	// Não vai se aplicar antes e depois de cada método de teste.
+
 //	@BeforeClass
 //	public static void setupClass() { //Lembre do static
 //		System.out.println("BeforeClass");
@@ -102,21 +97,19 @@ public class LocacaoServiceTest {
 //	public static void tearDownClass() { //Lembre do static
 //		System.out.println("AfterClass");
 //	}
-	
-	
-	
+
 	// ----------------- |TDD vídeo 13
 	@Test
 	public void deveAlugarFilmeComSucesso() throws Exception {
 		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
-		
+
 		// Instancie a classe que vc quer testar
-		//Usuario usuario = new Usuario("Usuario 1");
+		// Usuario usuario = new Usuario("Usuario 1");
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 
-		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());		
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
 
-		//List <Filme>filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
+		// List <Filme>filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
 
 		// Ação
 
@@ -125,36 +118,35 @@ public class LocacaoServiceTest {
 		// Verificação
 		error.checkThat(locacao.getValor(), is(equalTo(4.0))); // Fazer o import estático//Botão direito - sourse -
 																// "add import"
-	
+
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
-		error.checkThat(locacao.getDataLocacao(),MatchersProprios.ehHoje());
+		error.checkThat(locacao.getDataLocacao(), MatchersProprios.ehHoje());
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)), is(true));
-		error.checkThat(locacao.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDias(1)); // Fazer o import estático//Botão direito - sourse -
+		error.checkThat(locacao.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDias(1)); // Fazer o import
+																								// estático//Botão
+																								// direito - sourse -
 	}
-	
-	@Test(expected=FilmeSemEstoqueException.class)
+
+	@Test(expected = FilmeSemEstoqueException.class)
 	public void deveLancarExcecaoDeFilmeSemEstoque() throws Exception {
 
 		// Cenário - onde as variáveis serão inicializadas
 		// Inicializou abaixo essas duas variáveis public: Locacao alugarFilme(Usuario
-	// usuario, Filme filme)
+		// usuario, Filme filme)
 
 		// Instancie a classe que vc quer testar
-		
-		
-		Usuario usuario = UsuarioBuilder.umUsuario().agora();
-		//Usuario usuario = new Usuario("Usuario 1");
-		//List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 0, 4.0));
-		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().semEstoque().agora());		
 
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		// Usuario usuario = new Usuario("Usuario 1");
+		// List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 0, 4.0));
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().semEstoque().agora());
 
 		// Ação
 
 		service.alugarFilme(usuario, filmes);
 
 	}
-	
-	
+
 	@Test()
 	public void naoDeveAlugarFilmeSemUsuario() throws FilmeSemEstoqueException {
 
@@ -163,42 +155,41 @@ public class LocacaoServiceTest {
 		// usuario, Filme filme)
 
 		// Instancie a classe que vc quer testar
-		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().semEstoque().agora());		
-		//Através do Array.asList tudo que for passado por parâmetro
-		//vai ser transfoprmado em um item de uma lista 
-		//System.out.println("Teste!");
-
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().semEstoque().agora());
+		// Através do Array.asList tudo que for passado por parâmetro
+		// vai ser transfoprmado em um item de uma lista
+		// System.out.println("Teste!");
 
 		// Ação
-			try {
-				service.alugarFilme(null,filmes);
-				Assert.fail();
-			} catch (LocadoraException e) {
-				Assert.assertThat(e.getMessage(),is("Usuário não existente"));
-			}
+		try {
+			service.alugarFilme(null, filmes);
+			Assert.fail();
+		} catch (LocadoraException e) {
+			Assert.assertThat(e.getMessage(), is("Usuário não existente"));
+		}
 	}
-	
-	
-	//Forma 4
+
+	// Forma 4
 	@Test()
 	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
 
-		// Cenário 
-		Usuario usuario = UsuarioBuilder.umUsuario().agora();	
-		exception.expect(LocadoraException.class);	
+		// Cenário
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		exception.expect(LocadoraException.class);
 		exception.expectMessage("Filme não existente");
 
 		// Ação
 
-		service.alugarFilme(usuario,null);	
+		service.alugarFilme(usuario, null);
 
 	}
-	
+
 	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	
-			// TESTES PARA VERIFICAR DESCONTOS DE ACORDO COM A QUANTIDADE DE PROTUDOS COMPRADOS	- Vídeo 14
-			//EXISTE UMA FORMA SIMPLIFICADA NO ARQUIVO "CalculoValorLocacaoTest"
-	
+
+	// TESTES PARA VERIFICAR DESCONTOS DE ACORDO COM A QUANTIDADE DE PROTUDOS
+	// COMPRADOS - Vídeo 14
+	// EXISTE UMA FORMA SIMPLIFICADA NO ARQUIVO "CalculoValorLocacaoTest"
+
 //	@Test
 //	public void devePagar75PctNoFilme3() throws FilmeSemEstoqueException, LocadoraException {
 //		//cenário
@@ -275,141 +266,137 @@ public class LocacaoServiceTest {
 //		assertThat(resultado.getValor(), is(14.00));
 //
 //	}
-	
+
 	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	
-	
+
 	@Test
 	// @Ignore - Para pular um teste
 	public void naoDeveDevolverFilmeNoDomingo() throws FilmeSemEstoqueException, LocadoraException {
-		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));//Esse código só roda no sábado.
-		
-		//cenário
-		//Preciso de um usuário e um filme ao menos pra isso.
+		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));// Esse código só roda no sábado.
+
+		// cenário
+		// Preciso de um usuário e um filme ao menos pra isso.
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
-		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());		
-		
-		//ação
-		Locacao retorno = service.alugarFilme(usuario, filmes);	
-		
-		//verificação
-		
-		//Vídeo 17
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
+
+		// ação
+		Locacao retorno = service.alugarFilme(usuario, filmes);
+
+		// verificação
+
+		// Vídeo 17
 		boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
 		Assert.assertTrue(ehSegunda);
-		//assertThat(retorno.getDataRetorno(), new DiaSemanaMatcher(Calendar.MONDAY));
+		// assertThat(retorno.getDataRetorno(), new DiaSemanaMatcher(Calendar.MONDAY));
 //		assertThat(retorno.getDataRetorno(), MatchersProprios.caiEm(Calendar.MONDAY));
 		assertThat(retorno.getDataRetorno(), MatchersProprios.caiNumaSegunda());
 //		
 	}
-	
+
 	@Test
 	public void naoDeveAlugarFilmeParaNegativadoSPC() throws Exception {
-		
-		//Cenário
-		Usuario usuario = UsuarioBuilder.umUsuario().agora();
-		//Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuário2").agora();
 
-		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());		
-		
-		
+		// Cenário
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		// Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuário2").agora();
+
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
+
 		Mockito.when(spc.possuiNegativacao(Mockito.any(Usuario.class))).thenReturn(true);
-		//DESSA FORMA DE CIMA, INDEPENDENTE DE QUAL USUÁRIO FOR PASSADO O TESTE VAI ACONTECER
-		
-		//Ação
+		// DESSA FORMA DE CIMA, INDEPENDENTE DE QUAL USUÁRIO FOR PASSADO O TESTE VAI
+		// ACONTECER
+
+		// Ação
 		try {
 			service.alugarFilme(usuario, filmes);
-			//Verificacao
-			Assert.fail();	
-		}catch(LocadoraException e){
-			
-			Assert.assertThat(e.getMessage(),is("Usuário negativado"));
+			// Verificacao
+			Assert.fail();
+		} catch (LocadoraException e) {
+
+			Assert.assertThat(e.getMessage(), is("Usuário negativado"));
 		}
-		
-		//Verificação
-		
+
+		// Verificação
+
 		Mockito.verify(spc).possuiNegativacao(usuario);
 	}
-	
+
 	@Test // Muito difícil de entender - Vídeo 5 de Mocks
 	public void deveEnviarEmailLocacoesAtrasadas() {
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuário do dia").agora();
-		
 
-		//Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario2").agora();
+		// Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario2").agora();
 
-		//Cenário
-		List<Locacao> locacoes = Arrays.asList(LocacaoBuilder.umLocacao()
-				.atrasado()
-				.comUsuario(usuario)
-				.agora(),
-				/*LocacaoBuilder.umLocacao()
-				.atrasado()
-				.comUsuario(usuario)
-				.agora(),*/
-				
+		// Cenário
+		List<Locacao> locacoes = Arrays.asList(LocacaoBuilder.umLocacao().atrasado().comUsuario(usuario).agora(),
+				/*
+				 * LocacaoBuilder.umLocacao() .atrasado() .comUsuario(usuario) .agora(),
+				 */
+
 				LocacaoBuilder.umLocacao().comUsuario(usuario2).agora());
 		Mockito.when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
-		//Ação
+		// Ação
 		service.notificarAtrasos();
-		
-		
-		//Verficação
-		
+
+		// Verficação
+
 		Mockito.verify(email).notificarAtraso(usuario);
-		//Mockito.verify(email, Mockito.times(2)).notificarAtraso(usuario);
-		//Mockito.verify(email, Mockito.atLeast(2)).notificarAtraso(usuario); - Deve ser enviado pelo menos dois emails.
-		Mockito.verify(email, Mockito.never()).notificarAtraso(usuario2); //Para verificar se nunca ocorreu o envio para o usuario2
+		// Mockito.verify(email, Mockito.times(2)).notificarAtraso(usuario);
+		// Mockito.verify(email, Mockito.atLeast(2)).notificarAtraso(usuario); - Deve
+		// ser enviado pelo menos dois emails.
+		Mockito.verify(email, Mockito.never()).notificarAtraso(usuario2); // Para verificar se nunca ocorreu o envio
+																			// para o usuario2
 		Mockito.verifyNoMoreInteractions(email); // Mostra se nenhum outro email foi enviado que não seja
-		//para o "usuário"
+		// para o "usuário"
 		Mockito.verifyZeroInteractions(spc);
-				
+
 	}
-	
-	
-	
+
 	@Test
 	public void deveTratarErronoSPC() throws Exception {
-		
-		//Cenário
-		
+
+		// Cenário
+
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
-		
+
 		Mockito.when(spc.possuiNegativacao(usuario)).thenThrow(new Exception("Falha Catastrófica"));
-		
-		//Verificação
+
+		// Verificação
 
 		exception.expect(LocadoraException.class);
 		exception.expectMessage("Problemas com o SPC, tente novamente.");
 
-		
+		// Ação
+
+		service.alugarFilme(usuario, filmes);
+
+	}
+	
+	@Test
+	public void deveProrrogarUmaLocacao() {
+		//Cenário
+		Locacao locacao = LocacaoBuilder.umLocacao().agora();
 		
 		//Ação
+		service.prorrogarLocacao(locacao, 3);
 		
-		service.alugarFilme(usuario, filmes);
+		//Verificação
+		ArgumentCaptor<Locacao> argCapt = ArgumentCaptor.forClass(Locacao.class);
+		Mockito.verify(dao).salvar(argCapt.capture());
+		Locacao locacaoRetorna = argCapt.getValue();
 		
+		Assert.assertThat(locacaoRetorna.getValor(),is(12.0));
+		Assert.assertThat(locacaoRetorna.getDataLocacao(), MatchersProprios.ehHoje());
+		Assert.assertThat(locacaoRetorna.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDias(3));
 		
-	}
-	
-	
-	
-	
-	}
-	
-	
 
-	
-	
-	
+	}
 
-	
-	
-	
-	
-	
-	//Teste com lista
+}
+
+// Teste com lista
 //	@Test()
 //	public void testLocacao_usuarioVazio() throws FilmeSemEstoqueException {
 //
@@ -434,7 +421,7 @@ public class LocacaoServiceTest {
 //			}
 //	}
 
-	//
+//
 //	@Test
 //	public void testeDeLocacao() throws Exception {
 //		// Cenário - onde as variáveis serão inicializadas
@@ -527,7 +514,7 @@ public class LocacaoServiceTest {
 //
 //	}
 
-	// OPÇÃO 1) Uma forma de fazer erros ou fallhas aparecerem
+// OPÇÃO 1) Uma forma de fazer erros ou fallhas aparecerem
 //		Locacao locacao;
 //		try {
 //			locacao = service.alugarFilme(usuario, filme);
@@ -543,8 +530,8 @@ public class LocacaoServiceTest {
 //			
 //	     }
 
-	// Verificação
-	// Assert.assertEquals(5.0, locacao.getValor(), 0.01);
+// Verificação
+// Assert.assertEquals(5.0, locacao.getValor(), 0.01);
 //		assertTrue(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()));
 //		assertTrue(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)));
 
@@ -554,17 +541,7 @@ public class LocacaoServiceTest {
 //		assertThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()),is(true));		
 //		assertThat(DataUtils.isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)), is(true));
 //		
-	// Precisa usar error.checkThat, no lugar de assertThat
-	// Junto, lá em cima, @Rule public ErrorCollector error = new ErrorCollector();
-	// error.checkThat(locacao.getValor(),is(not(6.0))); //Verifique que o valor da
-	// locação não é 6
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+// Precisa usar error.checkThat, no lugar de assertThat
+// Junto, lá em cima, @Rule public ErrorCollector error = new ErrorCollector();
+// error.checkThat(locacao.getValor(),is(not(6.0))); //Verifique que o valor da
+// locação não é 6
