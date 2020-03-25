@@ -11,6 +11,11 @@ public class CalculadoraService {
 	public int subtrair(int a, int b) {
 		return a - b;
 	}
+	
+	public void imprime() {
+		System.out.println("Passei aqui");
+	}
+	
 
 	public int dividir(int a, int b) throws NaoPodeDividirPorZeroException {
 		if (b == 0) {
