@@ -8,11 +8,14 @@ import br.ce.wcaquino.exceptions.NaoPodeDividirPorZeroException;
 import br.ce.wcaquino.runners.ParallelRunner;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 
-@RunWith(ParallelRunner.class)
+//@RunWith(ParallelRunner.class)
 public class CalculadoraServiceTest {
+	
+	static StringBuffer ordem = new StringBuffer();
 	
 	//TDD
 	
@@ -22,12 +25,19 @@ public class CalculadoraServiceTest {
 	public void setup() {
 		calculadora = new CalculadoraService();
 		System.out.println("iniciando...");
+		ordem.append("1");
 	}
 	
 	@After
 	public void teearDown() {
 		System.out.println("finalizando...");
 	}
+	
+	@AfterClass
+	public static void tearDownClass() {
+		System.out.println(ordem.toString());
+	}
+
 	
 	@Test
 	public void deveSomarDoisValores() {

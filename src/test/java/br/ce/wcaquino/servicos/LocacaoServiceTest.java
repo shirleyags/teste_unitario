@@ -11,8 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable.BinaryOp.UMulHigh;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -41,7 +41,7 @@ import br.ce.wcaquino.runners.ParallelRunner;
 import br.ce.wcaquino.utils.DataUtils;
 
 
-@RunWith(ParallelRunner.class)
+//@RunWith(ParallelRunner.class)
 public class LocacaoServiceTest {
 
 	private static final int Locacao = 0;
@@ -71,6 +71,8 @@ public class LocacaoServiceTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		System.out.println("Inicializando2...");
+		CalculadoraServiceTest.ordem.append("2");
+		
 //		service = new LocacaoService(); //Só o nome da classe que está declarada em cima.
 //		dao = Mockito.mock(LocacaoDAO.class);
 //		service.setLocacaoDAO(dao);
@@ -92,6 +94,11 @@ public class LocacaoServiceTest {
 
 //		System.out.println("After");
 	}
+		
+		@AfterClass
+		public static void tearDownClass() {
+			System.out.println(CalculadoraServiceTest.ordem.toString());
+		}
 
 	// Essa opção é para antes da classe e depois dela ser instaciada.
 	// Não vai se aplicar antes e depois de cada método de teste.
